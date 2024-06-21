@@ -6,12 +6,14 @@ function SearchSort({ booksList }) {
   const [filteredBooks, setFilteredBooks] = useState(booksList);
 
   useEffect(() => {
-    if (searchTerm.length < 2) {
-      setFilteredBooks(booksList);
-    } else {
-      setFilteredBooks(
-        booksList.filter((book) => book.genre.includes(searchTerm))
+    if (searchTerm.length > 2) {
+      const lowerCaseValue = searchTerm.toLowerCase();
+      const filtered = booksList.filter((book) =>
+        book.genre.toLowerCase().includes(lowerCaseValue)
       );
+      setFilteredBooks(filtered.length > 0 ? filtered : null);
+    } else {
+      setFilteredBooks(booksList);
     }
   }, [searchTerm, booksList]);
 
@@ -20,22 +22,16 @@ function SearchSort({ booksList }) {
   };
 
   const sortBooksAsc = () => {
-    const sorted = [...filteredBooks].sort((a, b) => {
-      if (a.book_name && b.book_name) {
-        return a.book_name.localeCompare(b.book_name);
-      }
-      return 0;
-    });
+    const sorted = [...filteredBooks].sort((a, b) =>
+      a.book_name.localeCompare(b.book_name)
+    );
     setFilteredBooks(sorted);
   };
 
   const sortBooksDesc = () => {
-    const sorted = [...filteredBooks].sort((a, b) => {
-      if (a.book_name && b.book_name) {
-        return b.book_name.localeCompare(a.book_name);
-      }
-      return 0;
-    });
+    const sorted = [...filteredBooks].sort((a, b) =>
+      b.book_name.localeCompare(a.book_name)
+    );
     setFilteredBooks(sorted);
   };
 
